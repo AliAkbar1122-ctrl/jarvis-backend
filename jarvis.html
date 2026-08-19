@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Jarvis</title>
+<style>
+  :root {
+    --bg: #06070A;
+    --panel: #0F131A;
+    --panel-border: #1D232E;
+    --text: #E7E9EE;
+    --dim: #7A8194;
+    --primary: #8B9DFF;
+    --warm: #FF7A59;
+    --ok: #5CE0B0;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  #app {
+    display: flex; flex-direction: column;
+    height: 100vh; max-width: 480px; margin: 0 auto;
+  }
+  .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 20px; border-bottom: 1px solid var(--panel-border);
+  }
+  #title { font-size: 13px; font-weight: 600; letter-spacing: 0.25em; }
+  #status { font-size: 10px; letter-spacing: 0.15em; margin-top: 2px; color: var(--primary); }
+  #muteBtn {
+    width: 36px; height: 36px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--panel-border);
+    color: var(--dim); font-size: 16px; cursor: pointer;
+  }
+  #orbWrap { display: flex; justify-content: center; padding: 40px 0 24px; }
+  #orbOuter { position: relative; width: 140px; height: 140px; }
+  .ring {
+    position: absolute; inset: 0; border-radius: 999px;
+    border: 1.5px solid var(--primary); animation: pulseRing 2.2s ease-out infinite; opacity: 0;
+  }
+  .ring.on { opacity: 1; }
+  .ring2 { animation-delay: 0.6s; }
+  @keyframes pulseRing {
+    0% { transform: scale(0.9); opacity: 0.55; }
+    70% { transform: scale(1.35); opacity: 0; }
+    100% { transform: scale(1.35); opacity: 0; }
+  }
+  #orbCore {
+    position: absolute; inset: 18px; border-radius: 999px;
+    background: radial-gradient(circle at 35% 30%, #8B9DFF55, var(--panel) 70%);
+    border: 1px solid var(--panel-border);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 40px #8B9DFF33;
+    transition: box-shadow 0.3s ease;
+  }
+  #orbDot { width: 10px; height: 10px; border-radius: 999px; background: var(--primary); }
+  #bars { display: none; gap: 4px; align-items: center; height: 30px; }
+  #bars span {
+    width: 3px; height: 26px; border-radius: 2px; background: var(--warm);
+    animation: barPulse 0.9s ease-in-out infinite; transform-origin: center;
+  }
+  #bars span:nth-child(2) { animation-delay: 0.12s; }
+  #bars span:nth-child(3) { animation-delay: 0.24s; }
+  #bars span:nth-child(4) { animation-delay: 0.36s; }
+  #bars span:nth-child(5) { animation-delay: 0.48s; }
+  @keyframes barPulse { 0%, 100% { transform: scaleY(0.4); } 50% { transform: scaleY(1); } }
+  #transcript { flex: 1; overflow-y: auto; padding: 0 20px; min-height: 0; }
+  #emptyState { color: var(--dim); font-size: 14px; text-align: center; margin-top: 12px; line-height: 1.6; }
+  .msg { max-width: 82%; margin-bottom: 12px; }
+  .msg.user { margin-left: auto; text-align: right; }
+  .msg .role { font-size: 9px; letter-spacing: 0.15em; color: var(--dim); margin-bottom: 4px; }
+  .msg .bubble {
+    border-radius: 14px; padding: 10px 14px; font-size: 14.5px; line-height: 1.5;
+    background: var(--panel); border: 1px solid var(--panel-border); display: inline-block; text-align: left;
+  }
+  .msg.user .bubble { background: #8B9DFF1A; border-color: #8B9DFF44; }
+  #inputBar {
+    display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+    border-top: 1px solid var(--panel-border); background: var(--bg);
+  }
+  #textInput {
+    flex: 1; background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 12px; padding: 10px 14px; color: var(--text); font-size: 14px; outline: none;
+  }
+  #sendBtn, #micBtn {
+    flex-shrink: 0; border: none; border-radius: 999px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #sendBtn { width: 40px; height: 40px; background: var(--panel); border: 1px solid var(--panel-border); color: var(--dim); font-size: 16px; }
+  #sendBtn.active { background: var(--primary); color: #0A0A0F; }
+  #micBtn { width: 48px; height: 48px; background: var(--primary); color: #0A0A0F; font-size: 18px; }
+  #micBtn.listening { background: var(--warm); }
+  #notice { font-size: 11px; color: var(--dim); text-align: center; padding: 0 20px 8px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div>
+      <div id="title" class="mono">JARVIS</div>
+      <div id="status" class="mono">STANDING BY</div>
+    </div>
+    <button id="muteBtn">&#128266;</button>
+  </header>
+
+  <div id="orbWrap">
+    <div id="orbOuter">
+      <div class="ring" id="ring1"></div>
+      <div class="ring ring2" id="ring2"></div>
+      <div id="orbCore">
+        <div id="orbDot"></div>
+        <div id="bars"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="transcript">
+    <div id="emptyState">Tap the mic and talk, or type below.</div>
+  </div>
+
+  <div id="notice" style="display:none;">Voice input isn't supported in this browser — use text below.</div>
+
+  <div id="inputBar">
+    <input id="textInput" type="text" placeholder="Type a message" />
+    <button id="sendBtn">&#10148;</button>
+    <button id="micBtn">&#127908;</button>
+  </div>
+</div>
+
+<script>
+  const COLORS = { primary: '#8B9DFF', warm: '#FF7A59', ok: '#5CE0B0' };
+  let messages = [];
+  let status = 'idle';
+  let voiceOn = true;
+
+  const statusEl = document.getElementById('status');
+  const orbCore = document.getElementById('orbCore');
+  const orbDot = document.getElementById('orbDot');
+  const bars = document.getElementById('bars');
+  const ring1 = document.getElementById('ring1');
+  const ring2 = document.getElementById('ring2');
+  const transcriptEl = document.getElementById('transcript');
+  const emptyState = document.getElementById('emptyState');
+  const textInput = document.getElementById('textInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const micBtn = document.getElementById('micBtn');
+  const muteBtn = document.getElementById('muteBtn');
+
+  function setStatus(s) {
+    status = s;
+    const labels = { idle: 'STANDING BY', listening: 'LISTENING', thinking: 'THINKING', speaking: 'SPEAKING' };
+    statusEl.textContent = labels[s];
+    const color = s === 'listening' ? COLORS.warm : s === 'speaking' ? COLORS.ok : COLORS.primary;
+    statusEl.style.color = color;
+    orbCore.style.boxShadow = '0 0 40px ' + color + '33';
+    orbCore.style.background = 'radial-gradient(circle at 35% 30%, ' + color + '55, #0F131A 70%)';
+    orbDot.style.background = color;
+    ring1.style.borderColor = color;
+    ring2.style.borderColor = color;
+
+    const showRings = s === 'listening' || s === 'speaking';
+    ring1.classList.toggle('on', showRings);
+    ring2.classList.toggle('on', showRings);
+
+    bars.style.display = s === 'listening' ? 'flex' : 'none';
+    orbDot.style.display = s === 'listening' ? 'none' : 'block';
+
+    micBtn.classList.toggle('listening', s === 'listening');
+    micBtn.innerHTML = s === 'listening' ? '&#9632;' : '&#127908;';
+  }
+
+  function renderMessages() {
+    if (messages.length === 0) {
+      emptyState.style.display = 'block';
+      transcriptEl.querySelectorAll('.msg').forEach(el => el.remove());
+      return;
+    }
+    emptyState.style.display = 'none';
+    transcriptEl.innerHTML = '';
+    messages.forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'msg ' + (m.role === 'user' ? 'user' : 'assistant');
+      div.innerHTML = '<div class="role mono">' + (m.role === 'user' ? 'YOU' : 'JARVIS') + '</div><div class="bubble">' + m.content.replace(/</g,'&lt;') + '</div>';
+      transcriptEl.appendChild(div);
+    });
+    transcriptEl.scrollTop = transcriptEl.scrollHeight;
+  }
+
+  function speak(text) {
+    if (!voiceOn || !window.speechSynthesis) { setStatus('idle'); return; }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 1.02; utter.pitch = 0.95;
+    utter.onstart = () => setStatus('speaking');
+    utter.onend = () => setStatus('idle');
+    utter.onerror = () => setStatus('idle');
+    window.speechSynthesis.speak(utter);
+  }
+
+  const GMAIL_BACKEND = 'https://jarvis-backend-production-240c.up.railway.app';
+
+  function isEmailCommand(text) {
+    const t = text.toLowerCase();
+    return t.includes('email') || t.includes('mail') || t.includes('inbox') || t.includes('gmail');
+  }
+
+  async function handleEmailCommand() {
+    setStatus('thinking');
+    try {
+      const response = await fetch(GMAIL_BACKEND + '/api/gmail/summary');
+      const data = await response.json();
+      if (data.error) {
+        const msg = 'I am not connected to your Gmail right now. Please reauthorize.';
+        messages.push({ role: 'assistant', content: msg });
+        renderMessages();
+        speak(msg);
+        return;
+      }
+      const emails = data.emails || [];
+      if (emails.length === 0) {
+        const msg = 'Your inbox looks empty right now.';
+        messages.push({ role: 'assistant', content: msg });
+        renderMessages();
+        speak(msg);
+        return;
+      }
+      const spokenList = emails.slice(0, 5).map((e, i) => {
+        const fromName = e.from.split('<')[0].trim();
+        return `${i + 1}. From ${fromName}, subject: ${e.subject}.`;
+      }).join(' ');
+      const summaryText = `You have ${emails.length} recent emails. ${spokenList}`;
+      messages.push({ role: 'assistant', content: summaryText });
+      renderMessages();
+      speak(summaryText);
+    } catch (err) {
+      const msg = 'I had trouble reaching your inbox. Please try again.';
+      messages.push({ role: 'assistant', content: msg });
+      renderMessages();
+      speak(msg);
+    }
+  }
+
+  async function handleSend(text) {
+    const trimmed = (text || '').trim();
+    if (!trimmed) return;
+    messages.push({ role: 'user', content: trimmed });
+    renderMessages();
+    textInput.value = '';
+
+    if (isEmailCommand(trimmed)) {
+      await handleEmailCommand();
+      return;
+    }
+
+    setStatus('thinking');
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1000,
+          system: 'You are Jarvis, a calm, capable personal voice assistant. Reply in 1-3 short spoken sentences, plain language, no markdown, no lists, no headers, as if speaking out loud. Be direct and warm.',
+          messages: messages.map(m => ({ role: m.role, content: m.content }))
+        })
+      });
+      const data = await response.json();
+      const textBlocks = (data.content || []).filter(b => b.type === 'text');
+      const replyText = textBlocks.map(b => b.text).join(' ').trim() || "Sorry, I didn't catch that.";
+      messages.push({ role: 'assistant', content: replyText });
+      renderMessages();
+      speak(replyText);
+    } catch (err) {
+      messages.push({ role: 'assistant', content: 'I ran into a connection issue. Please try again.' });
+      renderMessages();
+      setStatus('idle');
+    }
+  }
+
+  sendBtn.addEventListener('click', () => handleSend(textInput.value));
+  textInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSend(textInput.value); });
+  textInput.addEventListener('input', () => {
+    sendBtn.classList.toggle('active', textInput.value.trim().length > 0);
+  });
+
+  muteBtn.addEventListener('click', () => {
+    voiceOn = !voiceOn;
+    if (!voiceOn) window.speechSynthesis.cancel();
+    muteBtn.innerHTML = voiceOn ? '&#128266;' : '&#128263;';
+  });
+
+  // Speech recognition setup
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  if (SR) {
+    recognition = new SR();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      handleSend(transcript);
+    };
+    recognition.onerror = () => setStatus('idle');
+    recognition.onend = () => { if (status === 'listening') setStatus('idle'); };
+  } else {
+    document.getElementById('notice').style.display = 'block';
+    micBtn.style.opacity = '0.4';
+  }
+
+  micBtn.addEventListener('click', () => {
+    if (!recognition) return;
+    if (status === 'listening') {
+      recognition.stop();
+      setStatus('idle');
+    } else {
+      try {
+        setStatus('listening');
+        recognition.start();
+      } catch (e) {
+        setStatus('idle');
+      }
+    }
+  });
+
+  setStatus('idle');
+</script>
+</body>
+</html>
