@@ -305,31 +305,51 @@
     recognition.lang = 'en-US';
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
-      handleSend(transcript);
-    };
-    recognition.onerror = () => setStatus('idle');
-    recognition.onend = () => { if (status === 'listening') setStatus('idle'); };
-  } else {
-    document.getElementById('notice').style.display = 'block';
-    micBtn.style.opacity = '0.4';
-  }
+      async function handleSend(text) {
+  const trimmed = (text || '').trim();
+  if (!trimmed) return;
 
-  micBtn.addEventListener('click', () => {
-    if (!recognition) return;
-    if (status === 'listening') {
-      recognition.stop();
-      setStatus('idle');
-    } else {
-      try {
-        setStatus('listening');
-        recognition.start();
-      } catch (e) {
-        setStatus('idle');
-      }
-    }
+  messages.push({
+    role: 'user',
+    content: trimmed
   });
 
-  setStatus('idle');
-</script>
-</body>
+  renderMessages();
+  textInput.value = '';
+
+  setStatus('thinking');
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: trimmed
+      })
+    });
+
+    const data = await response.json();
+
+    const reply = data.reply || 'Sorry, I could not understand that.';
+
+    messages.push({
+      role: 'assistant',
+      content: reply
+    });
+
+    renderMessages();
+    speak(reply);
+
+  } catch (error) {
+    messages.push({
+      role: 'assistant',
+      content: 'I cannot reach my brain right now.'
+    });
+
+    renderMessages();
+    setStatus('idle');
+  }
+      }
 </html>
