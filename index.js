@@ -1,34 +1,41 @@
-require('dotenv').config();
-
 const express = require('express');
-const { google } = require('googleapis');
-const path = require('path');
 
 const app = express();
+
 app.use(express.json());
 
-// 1. Health check route - Railway isi se check karega
 app.get('/', (req, res) => {
-  res.send('Jarves AI is Running! Connected with Gmail');
+  res.sendFile(__dirname + '/index.html');
 });
 
-// 2. Test route for Gmail
-app.get('/test-gmail', (req, res) => {
-  console.log("Testing Gmail connection...");
-  res.send('Gmail route working');
+app.get('/api/healthz', (req, res) => {
+  res.json({ status: 'ok', jarvis: 'online' });
 });
 
-// 3. Gmail OAuth setup
-const oauth2Client = new google.auth.OAuth2(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  process.env.REDIRECT_URI
-);
+app.post('/api/chat', (req, res) => {
+  const message = (req.body.message || '').trim();
 
-// Yahan tumhara baaki Gmail code aayega baad me
+  if (!message) {
+    return res.status(400).json({
+      error: 'Message is required'
+    });
+  }
 
-// IMPORTANT: Railway ke liye ye 2 cheez lazmi hain
+  let reply;
+
+  if (message.toLowerCase().includes('hello')) {
+    reply = 'Hello! I am Jarvis. How can I help you?';
+  } else if (message.toLowerCase().includes('name')) {
+    reply = 'I am Jarvis, your personal assistant.';
+  } else {
+    reply = `I received your message: ${message}`;
+  }
+
+  res.json({ reply });
+});
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Jarves running on port ${PORT}`);
+
+app.listen(PORT, () => {
+  console.log(`Jarvis running on port ${PORT}`);
 });
