@@ -2,20 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-<title>JARVIS v0.1</title>
+<title>Jarvis v0.1</title>
 
 <style>
 :root {
-  --bg: #06070A;
-  --panel: #0F131A;
-  --border: #1D232E;
-  --text: #E7E9EE;
-  --dim: #7A8194;
-  --primary: #8B9DFF;
-  --warm: #FF7A59;
-  --ok: #5CE0B0;
+  --bg: #06070a;
+  --panel: #0f131a;
+  --border: #1d232e;
+  --text: #e7e9ee;
+  --dim: #7a8194;
+  --primary: #8b9dff;
+  --warm: #ff7a59;
+  --ok: #5ce0b0;
 }
 
 * {
@@ -29,26 +30,34 @@ body {
   height: 100%;
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 }
 
-body {
-  overflow: hidden;
+button,
+input {
+  font: inherit;
 }
 
 #app {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  max-width: 480px;
-  margin: 0 auto;
+  max-width: 520px;
+  margin: auto;
 }
 
 .mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
 }
-
-/* HEADER */
 
 header {
   display: flex;
@@ -59,50 +68,47 @@ header {
 }
 
 #title {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.25em;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .25em;
 }
 
 #status {
+  margin-top: 4px;
   font-size: 10px;
-  letter-spacing: 0.15em;
-  margin-top: 3px;
+  letter-spacing: .15em;
   color: var(--primary);
 }
 
 #muteBtn {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--panel);
   border: 1px solid var(--border);
   color: var(--dim);
-  font-size: 16px;
   cursor: pointer;
 }
-
-/* ORB */
 
 #orbWrap {
   display: flex;
   justify-content: center;
-  padding: 40px 0 24px;
+  padding: 42px 0 25px;
 }
 
 #orbOuter {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
 }
 
 .ring {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1.5px solid var(--primary);
-  animation: pulseRing 2.2s ease-out infinite;
+  border: 1px solid var(--primary);
   opacity: 0;
+  animation: pulse 2.2s ease-out infinite;
 }
 
 .ring.on {
@@ -110,13 +116,13 @@ header {
 }
 
 .ring2 {
-  animation-delay: 0.6s;
+  animation-delay: .6s;
 }
 
-@keyframes pulseRing {
+@keyframes pulse {
   0% {
-    transform: scale(0.9);
-    opacity: 0.55;
+    transform: scale(.9);
+    opacity: .55;
   }
 
   70% {
@@ -134,29 +140,26 @@ header {
   position: absolute;
   inset: 18px;
   border-radius: 50%;
+  border: 1px solid var(--border);
   background:
     radial-gradient(
       circle at 35% 30%,
-      #8B9DFF55,
+      #8b9dff55,
       var(--panel) 70%
     );
 
-  border: 1px solid var(--border);
-
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
-  box-shadow: 0 0 40px #8B9DFF33;
+  box-shadow: 0 0 45px #8b9dff33;
 
-  transition:
-    box-shadow 0.3s ease,
-    background 0.3s ease;
+  transition: .3s;
 }
 
 #orbDot {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: var(--primary);
 }
@@ -164,8 +167,8 @@ header {
 #bars {
   display: none;
   gap: 4px;
-  align-items: center;
   height: 30px;
+  align-items: center;
 }
 
 #bars span {
@@ -173,28 +176,28 @@ header {
   height: 26px;
   border-radius: 2px;
   background: var(--warm);
-  animation: barPulse 0.9s ease-in-out infinite;
+  animation: bars .8s ease-in-out infinite;
 }
 
 #bars span:nth-child(2) {
-  animation-delay: 0.12s;
+  animation-delay: .1s;
 }
 
 #bars span:nth-child(3) {
-  animation-delay: 0.24s;
+  animation-delay: .2s;
 }
 
 #bars span:nth-child(4) {
-  animation-delay: 0.36s;
+  animation-delay: .3s;
 }
 
 #bars span:nth-child(5) {
-  animation-delay: 0.48s;
+  animation-delay: .4s;
 }
 
-@keyframes barPulse {
+@keyframes bars {
   0%, 100% {
-    transform: scaleY(0.4);
+    transform: scaleY(.35);
   }
 
   50% {
@@ -202,26 +205,22 @@ header {
   }
 }
 
-/* CHAT */
-
 #transcript {
   flex: 1;
   overflow-y: auto;
   padding: 0 20px;
-  min-height: 0;
 }
 
 #emptyState {
+  text-align: center;
   color: var(--dim);
   font-size: 14px;
-  text-align: center;
-  margin-top: 12px;
-  line-height: 1.6;
+  margin-top: 15px;
 }
 
 .msg {
-  max-width: 82%;
-  margin-bottom: 12px;
+  max-width: 85%;
+  margin-bottom: 13px;
 }
 
 .msg.user {
@@ -229,86 +228,75 @@ header {
   text-align: right;
 }
 
-.msg .role {
+.role {
   font-size: 9px;
-  letter-spacing: 0.15em;
+  letter-spacing: .15em;
   color: var(--dim);
   margin-bottom: 4px;
 }
 
-.msg .bubble {
-  border-radius: 14px;
+.bubble {
+  display: inline-block;
   padding: 10px 14px;
-  font-size: 14.5px;
-  line-height: 1.5;
+  border-radius: 14px;
   background: var(--panel);
   border: 1px solid var(--border);
-  display: inline-block;
+  font-size: 14.5px;
+  line-height: 1.5;
   text-align: left;
+  white-space: pre-wrap;
 }
 
 .msg.user .bubble {
-  background: #8B9DFF1A;
-  border-color: #8B9DFF44;
+  background: #8b9dff1a;
+  border-color: #8b9dff44;
 }
-
-/* INPUT */
 
 #inputBar {
   display: flex;
-  align-items: center;
   gap: 8px;
+  align-items: center;
   padding: 12px 16px;
   border-top: 1px solid var(--border);
-  background: var(--bg);
 }
 
 #textInput {
   flex: 1;
-  background: var(--panel);
-  border: 1px solid var(--border);
+  min-width: 0;
+  padding: 11px 14px;
   border-radius: 12px;
-  padding: 10px 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
   color: var(--text);
-  font-size: 14px;
   outline: none;
-}
-
-#textInput:focus {
-  border-color: var(--primary);
 }
 
 #sendBtn,
 #micBtn {
-  flex-shrink: 0;
   border-radius: 50%;
+  border: 1px solid var(--border);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink: 0;
 }
 
 #sendBtn {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   background: var(--panel);
-  border: 1px solid var(--border);
   color: var(--dim);
-  font-size: 16px;
 }
 
 #sendBtn.active {
   background: var(--primary);
-  color: #0A0A0F;
+  color: #08090d;
 }
 
 #micBtn {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   background: var(--primary);
-  color: #0A0A0F;
+  color: #08090d;
   border: none;
-  font-size: 18px;
 }
 
 #micBtn.listening {
@@ -316,9 +304,10 @@ header {
 }
 
 #notice {
-  font-size: 11px;
-  color: var(--dim);
+  display: none;
   text-align: center;
+  color: var(--dim);
+  font-size: 11px;
   padding: 0 20px 8px;
 }
 </style>
@@ -328,310 +317,219 @@ header {
 
 <div id="app">
 
-  <header>
+<header>
+  <div>
+    <div id="title" class="mono">JARVIS</div>
+    <div id="status" class="mono">STANDING BY</div>
+  </div>
 
-    <div>
-      <div id="title" class="mono">
-        JARVIS
-      </div>
+  <button id="muteBtn">🔊</button>
+</header>
 
-      <div id="status" class="mono">
-        STANDING BY
-      </div>
-    </div>
+<div id="orbWrap">
 
-    <button id="muteBtn">
-      🔊
-    </button>
+  <div id="orbOuter">
 
-  </header>
+    <div class="ring" id="ring1"></div>
+    <div class="ring ring2" id="ring2"></div>
 
+    <div id="orbCore">
 
-  <div id="orbWrap">
+      <div id="orbDot"></div>
 
-    <div id="orbOuter">
-
-      <div class="ring" id="ring1"></div>
-
-      <div class="ring ring2" id="ring2"></div>
-
-      <div id="orbCore">
-
-        <div id="orbDot"></div>
-
-        <div id="bars">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-
+      <div id="bars">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
 
     </div>
-
-  </div>
-
-
-  <div id="transcript">
-
-    <div id="emptyState">
-      Tap the mic and talk, or type below.
-    </div>
-
-  </div>
-
-
-  <div
-    id="notice"
-    style="display:none;"
-  >
-    Voice input isn't supported in this browser.
-  </div>
-
-
-  <div id="inputBar">
-
-    <input
-      id="textInput"
-      type="text"
-      placeholder="Type a message"
-      autocomplete="off"
-    >
-
-    <button id="sendBtn">
-      ➤
-    </button>
-
-    <button id="micBtn">
-      🎙️
-    </button>
 
   </div>
 
 </div>
 
+<div id="transcript">
+  <div id="emptyState">
+    Mic dabao aur Jarvis se baat karo.
+  </div>
+</div>
+
+<div id="notice">
+  Voice recognition is not supported in this browser.
+</div>
+
+<div id="inputBar">
+
+  <input
+    id="textInput"
+    type="text"
+    placeholder="Type a message..."
+  >
+
+  <button id="sendBtn">➤</button>
+
+  <button id="micBtn">🎙️</button>
+
+</div>
+
+</div>
 
 <script>
 
-const COLORS = {
-  primary: '#8B9DFF',
-  warm: '#FF7A59',
-  ok: '#5CE0B0'
-};
-
 let messages = [];
-
-let status = 'idle';
-
+let status = "idle";
 let voiceOn = true;
 
-let userName = localStorage.getItem('jarvis_user_name') || '';
-
-
-// ELEMENTS
-
-const statusEl =
-  document.getElementById('status');
-
-const orbCore =
-  document.getElementById('orbCore');
-
-const orbDot =
-  document.getElementById('orbDot');
-
-const bars =
-  document.getElementById('bars');
-
-const ring1 =
-  document.getElementById('ring1');
-
-const ring2 =
-  document.getElementById('ring2');
+const statusEl = document.getElementById("status");
+const orbCore = document.getElementById("orbCore");
+const orbDot = document.getElementById("orbDot");
+const bars = document.getElementById("bars");
+const ring1 = document.getElementById("ring1");
+const ring2 = document.getElementById("ring2");
 
 const transcriptEl =
-  document.getElementById('transcript');
+  document.getElementById("transcript");
 
 const emptyState =
-  document.getElementById('emptyState');
+  document.getElementById("emptyState");
 
 const textInput =
-  document.getElementById('textInput');
+  document.getElementById("textInput");
 
 const sendBtn =
-  document.getElementById('sendBtn');
+  document.getElementById("sendBtn");
 
 const micBtn =
-  document.getElementById('micBtn');
+  document.getElementById("micBtn");
 
 const muteBtn =
-  document.getElementById('muteBtn');
+  document.getElementById("muteBtn");
 
-
-// STATUS
 
 function setStatus(s) {
 
   status = s;
 
   const labels = {
-
-    idle: 'STANDING BY',
-
-    listening: 'LISTENING',
-
-    thinking: 'THINKING',
-
-    speaking: 'SPEAKING'
-
+    idle: "STANDING BY",
+    listening: "LISTENING",
+    thinking: "THINKING",
+    speaking: "SPEAKING"
   };
 
-  statusEl.textContent =
-    labels[s] || 'STANDING BY';
-
+  statusEl.textContent = labels[s];
 
   const color =
-    s === 'listening'
-      ? COLORS.warm
-      : s === 'speaking'
-        ? COLORS.ok
-        : COLORS.primary;
-
+    s === "listening"
+      ? "#ff7a59"
+      : s === "speaking"
+      ? "#5ce0b0"
+      : "#8b9dff";
 
   statusEl.style.color = color;
 
   orbCore.style.boxShadow =
-    '0 0 40px ' + color + '33';
+    "0 0 45px " + color + "33";
 
   orbCore.style.background =
-    'radial-gradient(circle at 35% 30%, ' +
-    color +
-    '55, #0F131A 70%)';
+    "radial-gradient(circle at 35% 30%, "
+    + color + "55, #0F131A 70%)";
 
   orbDot.style.background = color;
 
   ring1.style.borderColor = color;
-
   ring2.style.borderColor = color;
 
+  const active =
+    s === "listening" ||
+    s === "speaking";
 
-  const showRings =
-    s === 'listening' ||
-    s === 'speaking';
-
-
-  ring1.classList.toggle(
-    'on',
-    showRings
-  );
-
-  ring2.classList.toggle(
-    'on',
-    showRings
-  );
-
+  ring1.classList.toggle("on", active);
+  ring2.classList.toggle("on", active);
 
   bars.style.display =
-    s === 'listening'
-      ? 'flex'
-      : 'none';
-
+    s === "listening"
+      ? "flex"
+      : "none";
 
   orbDot.style.display =
-    s === 'listening'
-      ? 'none'
-      : 'block';
-
+    s === "listening"
+      ? "none"
+      : "block";
 
   micBtn.classList.toggle(
-    'listening',
-    s === 'listening'
+    "listening",
+    s === "listening"
   );
 
-
-  micBtn.innerHTML =
-    s === 'listening'
-      ? '■'
-      : '🎙️';
-
+  micBtn.textContent =
+    s === "listening"
+      ? "■"
+      : "🎙️";
 }
 
-
-// MESSAGES
 
 function renderMessages() {
 
   if (messages.length === 0) {
 
-    emptyState.style.display =
-      'block';
+    emptyState.style.display = "block";
+
+    transcriptEl
+      .querySelectorAll(".msg")
+      .forEach(el => el.remove());
 
     return;
   }
 
-
-  emptyState.style.display =
-    'none';
-
+  emptyState.style.display = "none";
 
   transcriptEl
-    .querySelectorAll('.msg')
+    .querySelectorAll(".msg")
     .forEach(el => el.remove());
 
-
-  messages.forEach(message => {
+  messages.forEach(m => {
 
     const div =
-      document.createElement('div');
+      document.createElement("div");
 
     div.className =
-      'msg ' +
-      (
-        message.role === 'user'
-          ? 'user'
-          : 'assistant'
-      );
-
+      "msg " +
+      (m.role === "user"
+        ? "user"
+        : "assistant");
 
     const role =
-      document.createElement('div');
+      document.createElement("div");
 
-    role.className =
-      'role mono';
+    role.className = "role mono";
 
     role.textContent =
-      message.role === 'user'
-        ? 'YOU'
-        : 'JARVIS';
-
+      m.role === "user"
+        ? "YOU"
+        : "JARVIS";
 
     const bubble =
-      document.createElement('div');
+      document.createElement("div");
 
-    bubble.className =
-      'bubble';
+    bubble.className = "bubble";
 
-    bubble.textContent =
-      message.content;
-
+    bubble.textContent = m.content;
 
     div.appendChild(role);
-
     div.appendChild(bubble);
 
     transcriptEl.appendChild(div);
 
   });
 
-
   transcriptEl.scrollTop =
     transcriptEl.scrollHeight;
-
 }
 
-
-// SPEECH
 
 function speak(text) {
 
@@ -639,416 +537,136 @@ function speak(text) {
     !voiceOn ||
     !window.speechSynthesis
   ) {
-
-    setStatus('idle');
-
+    setStatus("idle");
     return;
   }
 
-
   window.speechSynthesis.cancel();
 
-
-  const utterance =
+  const utter =
     new SpeechSynthesisUtterance(text);
 
+  utter.rate = 1.02;
+  utter.pitch = .95;
 
-  utterance.rate = 1.02;
+  utter.onstart =
+    () => setStatus("speaking");
 
-  utterance.pitch = 0.95;
+  utter.onend =
+    () => setStatus("idle");
 
+  utter.onerror =
+    () => setStatus("idle");
 
-  utterance.onstart =
-    () => setStatus('speaking');
-
-
-  utterance.onend =
-    () => setStatus('idle');
-
-
-  utterance.onerror =
-    () => setStatus('idle');
-
-
-  window.speechSynthesis.speak(
-    utterance
-  );
-
+  window.speechSynthesis.speak(utter);
 }
 
 
-// LOCAL JARVIS BRAIN
-
-function getJarvisReply(message) {
-
-  const text =
-    message.toLowerCase().trim();
-
-
-  // NAME
-
-  if (
-    text.includes('my name is ')
-  ) {
-
-    const name =
-      message
-        .substring(
-          text.indexOf('my name is ') +
-          11
-        )
-        .trim();
-
-
-    if (name) {
-
-      userName = name;
-
-      localStorage.setItem(
-        'jarvis_user_name',
-        name
-      );
-
-
-      return (
-        'Nice to meet you, ' +
-        name +
-        '. I will remember your name.'
-      );
-
-    }
-
-  }
-
-
-  if (
-    text.includes('mera naam ')
-  ) {
-
-    const name =
-      message
-        .split('mera naam')[1]
-        .replace(/hai/gi, '')
-        .trim();
-
-
-    if (name) {
-
-      userName = name;
-
-      localStorage.setItem(
-        'jarvis_user_name',
-        name
-      );
-
-
-      return (
-        'Theek hai ' +
-        name +
-        '. Main aap ka naam yaad rakhunga.'
-      );
-
-    }
-
-  }
-
-
-  // GREETING
-
-  if (
-    text === 'hello' ||
-    text === 'hi' ||
-    text.includes('hello jarvis') ||
-    text.includes('hi jarvis')
-  ) {
-
-    if (userName) {
-
-      return (
-        'Hello ' +
-        userName +
-        '. I am Jarvis. How can I help you?'
-      );
-
-    }
-
-
-    return (
-      'Hello. I am Jarvis. How can I help you?'
-    );
-
-  }
-
-
-  // NAME QUESTION
-
-  if (
-    text.includes('what is my name') ||
-    text.includes('mera naam kya hai') ||
-    text.includes('do you know my name')
-  ) {
-
-    if (userName) {
-
-      return (
-        'Your name is ' +
-        userName +
-        '.'
-      );
-
-    }
-
-
-    return (
-      'I do not know your name yet. Tell me, my name is followed by your name.'
-    );
-
-  }
-
-
-  // WHO ARE YOU
-
-  if (
-    text.includes('who are you') ||
-    text.includes('your name')
-  ) {
-
-    return (
-      'I am Jarvis, your personal assistant.'
-    );
-
-  }
-
-
-  // HOW ARE YOU
-
-  if (
-    text.includes('how are you')
-  ) {
-
-    return (
-      'I am online and ready to help.'
-    );
-
-  }
-
-
-  // TIME
-
-  if (
-    text.includes('what time') ||
-    text === 'time' ||
-    text.includes('current time')
-  ) {
-
-    const time =
-      new Date().toLocaleTimeString(
-        [],
-        {
-          hour: 'numeric',
-          minute: '2-digit'
-        }
-      );
-
-
-    return (
-      'The current time is ' +
-      time +
-      '.'
-    );
-
-  }
-
-
-  // DATE
-
-  if (
-    text.includes('what date') ||
-    text.includes("today's date") ||
-    text.includes('today date')
-  ) {
-
-    const date =
-      new Date().toLocaleDateString(
-        [],
-        {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        }
-      );
-
-
-    return (
-      'Today is ' +
-      date +
-      '.'
-    );
-
-  }
-
-
-  // THANKS
-
-  if (
-    text.includes('thank you') ||
-    text.includes('thanks')
-  ) {
-
-    return (
-      'You are welcome. I am here to help.'
-    );
-
-  }
-
-
-  // BYE
-
-  if (
-    text === 'bye' ||
-    text.includes('goodbye')
-  ) {
-
-    return (
-      'Goodbye. I will be here when you need me.'
-    );
-
-  }
-
-
-  // TEST
-
-  if (
-    text.includes('test')
-  ) {
-
-    return (
-      'Systems are working. Jarvis version zero point one is online.'
-    );
-
-  }
-
-
-  // DEFAULT
-
-  return (
-    'I heard you say: ' +
-    message +
-    '. I am still a simple local Jarvis, but I am ready for my next upgrade.'
-  );
-
-}
-
-
-// SEND MESSAGE
-
-function handleSend(text) {
+async function handleSend(text) {
 
   const trimmed =
-    (text || '').trim();
-
+    String(text || "").trim();
 
   if (!trimmed) return;
 
-
   messages.push({
-
-    role: 'user',
-
+    role: "user",
     content: trimmed
-
   });
-
 
   renderMessages();
 
+  textInput.value = "";
 
-  textInput.value = '';
+  sendBtn.classList.remove("active");
 
-  sendBtn.classList.remove(
-    'active'
-  );
+  setStatus("thinking");
 
+  try {
 
-  setStatus('thinking');
+    const response =
+      await fetch("/api/chat", {
 
+        method: "POST",
 
-  setTimeout(() => {
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body: JSON.stringify({
+          message: trimmed
+        })
+      });
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        data.error ||
+        "AI request failed"
+      );
+    }
 
     const reply =
-      getJarvisReply(trimmed);
-
+      data.reply ||
+      "Mujhe jawab nahi mila.";
 
     messages.push({
-
-      role: 'assistant',
-
+      role: "assistant",
       content: reply
-
     });
-
 
     renderMessages();
 
+    speak(reply);
+
+  } catch (error) {
+
+    console.error(error);
+
+    const reply =
+      "Jarvis ka AI brain abhi connect nahi ho raha. Backend aur AI key check karo.";
+
+    messages.push({
+      role: "assistant",
+      content: reply
+    });
+
+    renderMessages();
 
     speak(reply);
 
-
-    if (
-      !voiceOn ||
-      !window.speechSynthesis
-    ) {
-
-      setStatus('idle');
-
-    }
-
-  }, 500);
-
+    setStatus("idle");
+  }
 }
 
 
-// SEND BUTTON
-
 sendBtn.addEventListener(
-  'click',
-  () => {
-
-    handleSend(
-      textInput.value
-    );
-
-  }
+  "click",
+  () => handleSend(textInput.value)
 );
 
 
-// ENTER KEY
-
 textInput.addEventListener(
-  'keydown',
+  "keydown",
   event => {
 
-    if (event.key === 'Enter') {
-
-      handleSend(
-        textInput.value
-      );
-
+    if (event.key === "Enter") {
+      handleSend(textInput.value);
     }
 
   }
 );
 
 
-// INPUT BUTTON
-
 textInput.addEventListener(
-  'input',
+  "input",
   () => {
 
     sendBtn.classList.toggle(
-      'active',
+      "active",
       textInput.value.trim().length > 0
     );
 
@@ -1056,156 +674,103 @@ textInput.addEventListener(
 );
 
 
-// MUTE
-
 muteBtn.addEventListener(
-  'click',
+  "click",
   () => {
 
     voiceOn = !voiceOn;
 
-
-    if (
-      !voiceOn &&
-      window.speechSynthesis
-    ) {
-
-      window.speechSynthesis.cancel();
-
+    if (!voiceOn) {
+      window.speechSynthesis?.cancel();
     }
 
-
-    muteBtn.innerHTML =
-      voiceOn
-        ? '🔊'
-        : '🔇';
+    muteBtn.textContent =
+      voiceOn ? "🔊" : "🔇";
 
   }
 );
 
 
-// SPEECH RECOGNITION
+// Voice recognition
 
 const SpeechRecognition =
   window.SpeechRecognition ||
   window.webkitSpeechRecognition;
 
-
 let recognition = null;
-
 
 if (SpeechRecognition) {
 
   recognition =
     new SpeechRecognition();
 
+  recognition.continuous = false;
+  recognition.interimResults = false;
 
-  recognition.continuous =
-    false;
-
-
-  recognition.interimResults =
-    false;
-
-
-  recognition.lang =
-    'en-US';
-
+  // Roman Urdu / Urdu / English ko browser
+  // automatically recognize karne ki koshish karega.
+  recognition.lang = "en-US";
 
   recognition.onstart =
-    () => {
-
-      setStatus('listening');
-
-    };
-
+    () => setStatus("listening");
 
   recognition.onresult =
     event => {
 
-      const spokenText =
+      const transcript =
         event.results[0][0].transcript;
 
-
-      handleSend(
-        spokenText
-      );
-
+      handleSend(transcript);
     };
-
 
   recognition.onerror =
-    event => {
-
-      console.log(
-        'Speech error:',
-        event.error
-      );
-
-
-      setStatus('idle');
-
-    };
-
+    () => setStatus("idle");
 
   recognition.onend =
     () => {
 
-      if (
-        status === 'listening'
-      ) {
-
-        setStatus('idle');
-
+      if (status === "listening") {
+        setStatus("idle");
       }
 
     };
 
-
-  micBtn.addEventListener(
-    'click',
-    () => {
-
-      if (
-        status === 'listening'
-      ) {
-
-        recognition.stop();
-
-        return;
-
-      }
-
-
-      try {
-
-        recognition.start();
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-
-    }
-  );
-
 } else {
 
   document.getElementById(
-    'notice'
-  ).style.display = 'block';
+    "notice"
+  ).style.display = "block";
 
-
-  micBtn.style.opacity =
-    '0.5';
-
+  micBtn.style.opacity = ".4";
 }
 
 
-// START
+micBtn.addEventListener(
+  "click",
+  () => {
 
-setStatus('idle');
+    if (!recognition) return;
+
+    if (status === "listening") {
+
+      recognition.stop();
+
+      setStatus("idle");
+
+      return;
+    }
+
+    try {
+      recognition.start();
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+);
+
+
+setStatus("idle");
 
 </script>
 
